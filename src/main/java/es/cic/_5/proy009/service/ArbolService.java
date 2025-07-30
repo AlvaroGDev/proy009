@@ -45,8 +45,16 @@ public class ArbolService {
         arbolRepository.deleteById(id);
     }
 
-    public Rama saveRama(Rama rama) throws Exception {
+    public Rama saveRama(Rama rama){
             
        return ramaRepository.save(rama);
+    }
+
+    public void deleteRama(Rama rama) {
+        ramaRepository.delete(rama);
+    }
+
+    public Rama updateRama(Rama rama) {
+        return ramaRepository.save(rama);
     }
 }

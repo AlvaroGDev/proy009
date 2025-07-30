@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import es.cic._5.proy009.model.Accion;
 import es.cic._5.proy009.model.Arbol;
 import es.cic._5.proy009.model.Rama;
+import es.cic._5.proy009.model.RamaDTO;
 import es.cic._5.proy009.service.ArbolService;
 import es.cic._5.proy009.service.RamaService;
 
@@ -25,14 +29,17 @@ import es.cic._5.proy009.service.RamaService;
 public class ArbolController {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ArbolController.class);
-    
+
+    @Autowired
+    ObjectMapper objectMapper;
+
     @Autowired
     private ArbolService arbolService;
 
     @Autowired
     private RamaService ramaService;
 
-    // -- MÉTODOS CRUD PARA ÁRBOL -- 
+    // -- MÉTODOS CRUD PARA ÁRBOL --
 
     @GetMapping
     public List<Arbol> getAll() {
@@ -77,16 +84,46 @@ public class ArbolController {
 
     // -- MÉTODOS CRUD PARA RAMA --
     @PostMapping("/{id}/rama") // El arbol desarrolla una rama
-    public Rama createRama(@PathVariable Long id, @RequestBody Rama rama) throws Exception{
+    public Rama createRama(@PathVariable Long id, @RequestBody Rama rama) throws Exception {
+        // Le tengo que pasar un id de árbol y una rama
+        Arbol arbol = arbolService.get(id); // Me cojo el id (o el nulo si no existe)
 
-        Arbol arbol = arbolService.get(id);
-        if( arbol == null)
-        throw new Exception("Error: Estás apuntando a un arbol que no existe");
-
+        if (arbol == null)
+            throw new Exception("Error: Estás apuntando a un arbol que no existe");
+        // Si no existe tiro excepción directamente
         rama.setArbol(arbol);
-
+        // Si existe, se lo añado a la rama
         return arbolService.saveRama(rama);
-        
+        // Guardo esa rama dentro del árbol
+    }
+
+    @PostMapping("/{id}/acciones")
+    public void ejecutaAcciones(@PathVariable Long id, @RequestBody List<Accion> acciones) throws Exception {
+
+        for (Accion accion : acciones) {
+            Rama miRama = null;
+            RamaDTO dataRama = accion.getDataRama();
+            switch (accion.getTipoAccion()) {
+                case "CREAR":
+                    miRama = objectMapper.convertValue(dataRama, Rama.class);
+                    miRama.setArbol(arbolService.get(id));
+                    arbolService.saveRama(miRama);
+                    break;
+
+                case "BORRAR":
+                    Long idABorrar = (objectMapper.convertValue(dataRama, Rama.class).getId());
+                    // Creo un objeto rama y le cojo el id
+                    arbolService.delete(idABorrar);
+                    break;
+                case "ACTUALIZAR":
+                    miRama = objectMapper.convertValue(dataRama, Rama.class);
+                    arbolService.updateRama(miRama);
+                    break;
+                default:
+                    break;
+            }
+
+        }
     }
 
 }

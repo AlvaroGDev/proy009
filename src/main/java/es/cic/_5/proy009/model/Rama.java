@@ -1,7 +1,5 @@
 package es.cic._5.proy009.model;
 
-import java.util.Optional;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -22,6 +20,7 @@ public class Rama {
     @Column(name = "NUMERO_HOJAS")
     private int numHojas;
 
+    private String nombre;
     private Boolean torcida;
     private Long longitud;
     private Long grosor;
@@ -44,6 +43,15 @@ public class Rama {
 
     public void setNumHojas(int numHojas) {
         this.numHojas = numHojas;
+    }
+
+    
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public Boolean getTorcida() {
@@ -78,6 +86,8 @@ public class Rama {
         return result;
     }
 
+    
+
     public Arbol getArbol() {
         return arbol;
     }
@@ -108,5 +118,6 @@ public class Rama {
         return "Rama [id=" + id + ", numHojas=" + numHojas + ", torcida=" + torcida + ", longitud=" + longitud
                 + ", grosor=" + grosor + "]";
     }
+
 
 }
