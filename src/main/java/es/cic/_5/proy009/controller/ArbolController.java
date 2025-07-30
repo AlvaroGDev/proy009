@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.cic._5.proy009.model.Arbol;
+import es.cic._5.proy009.model.Rama;
 import es.cic._5.proy009.service.ArbolService;
 
 @RestController
@@ -65,6 +66,12 @@ public class ArbolController {
     public void delete(@PathVariable(required = true) Long id) {
         LOGGER.info("Borro el árbol con id: " + id);
         arbolService.delete(id);
+    }
+
+    @PostMapping("/crearama") // El arbol desarrolla una rama
+    public Arbol create(@RequestBody Rama rama) {
+        Arbol ramaCreada = arbolService.createRama(rama);
+        return ramaCreada;
     }
 
 }

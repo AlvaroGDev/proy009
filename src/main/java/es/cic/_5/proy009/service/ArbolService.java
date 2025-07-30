@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.cic._5.proy009.model.Arbol;
+import es.cic._5.proy009.model.Rama;
 import es.cic._5.proy009.repository.ArbolRepository;
 
 @Service
@@ -17,9 +18,13 @@ public class ArbolService {
     @Autowired
     private ArbolRepository arbolRepository;
 
-    public Arbol create(Arbol conductor) {
+    public Arbol create(Arbol arbol) {
 
-        return arbolRepository.save(conductor);
+        return arbolRepository.save(arbol);
+    }
+
+    public Arbol createRama (Rama rama) {
+        return arbolRepository.save(rama);
     }
 
     @Transactional(readOnly = true)
