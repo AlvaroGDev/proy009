@@ -30,8 +30,6 @@ public class Arbol {
 
     }
 
-    
-
     public Arbol(Long id, Long edad, String especie, String tipoHoja, Boolean frutal, List<Rama> ramas) {
         this.id = id;
         this.edad = edad;
@@ -40,8 +38,6 @@ public class Arbol {
         this.frutal = frutal;
         this.ramas = ramas;
     }
-
-
 
     public Long getId() {
         return id;
