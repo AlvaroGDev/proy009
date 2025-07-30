@@ -100,27 +100,61 @@ public class ArbolController {
     @PostMapping("/{id}/acciones")
     public void ejecutaAcciones(@PathVariable Long id, @RequestBody List<Accion> acciones) throws Exception {
 
+        Long idArbolActual = arbolService.get(id).getId(); // Devuelve un arbol o un nulo
+        Rama miRama;
+
         for (Accion accion : acciones) {
-            Rama miRama = null;
-            RamaDTO dataRama = accion.getDataRama();
-            switch (accion.getTipoAccion()) {
+
+            miRama = null; // 'Limpiamos' la rama para no llevarnos datos
+            RamaDTO dataRama = accion.getDataRama(); // En dataRama tenemos los datos de la rama (de la clase RamaDTO)
+
+            switch (accion.getTipoAccion()) { // Aquí entra en crear, borrar, actualizar
+
                 case "CREAR":
-                    miRama = objectMapper.convertValue(dataRama, Rama.class);
-                    miRama.setArbol(arbolService.get(id));
-                    arbolService.saveRama(miRama);
+
+                    if (idArbolActual == null)
+                        throw new CreateSecurityException("Error: no me puedes pasar un ID para crear"); // Si es nulo nos vamos
+
+                    miRama = objectMapper.convertValue(dataRama, Rama.class); // Guardamos el objeto miRama
+                    miRama.setArbol(arbolService.get(id)); // Le decimos a que arbol pertenece
+
+                    arbolService.saveRama(miRama); // Guardamos utilizando el arbolService
+
                     break;
 
                 case "BORRAR":
-                    Long idABorrar = (objectMapper.convertValue(dataRama, Rama.class).getId());
-                    // Creo un objeto rama y le cojo el id
-                    arbolService.delete(idABorrar);
-                    break;
-                case "ACTUALIZAR":
+
+                    Long idABorrar = dataRama.getId();
+                    Rama ramaABorrar = arbolService.getRama(idABorrar);
+
+                    if(ramaABorrar == null)
+                         throw new DeleteSecurityException("Error: no se encuentra la rama");
+                        // Como en este caso el borrado se hace pasando una rama entera, lo controlamos
+                    
+
+                        
                     miRama = objectMapper.convertValue(dataRama, Rama.class);
+                    miRama.setArbol(arbolService.get(idABorrar));
+                    // Creo un objeto rama y le cojo el id
+                    arbolService.deleteRama(miRama); // Para borrar la rama sí le pasamos la rama entera, no solo el id
+
+                    break;
+
+                case "ACTUALIZAR":
+
+                    miRama = objectMapper.convertValue(dataRama, Rama.class);
+                    if(miRama.getId() == null)
+                        throw new DeleteSecurityException("Error: me estás intentando crear un registro mediante modificación");
+
+                    miRama.setArbol(arbolService.get(id));
+
                     arbolService.updateRama(miRama);
-                    break;
+
+                    break; 
+
                 default:
-                    break;
+                throw new Exception("Error: has indicado una acción que no existe.");
+                   
             }
 
         }

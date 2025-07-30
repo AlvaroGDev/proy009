@@ -45,6 +45,12 @@ public class ArbolService {
         arbolRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public Rama getRama(Long id) {
+        Optional<Rama> rama = ramaRepository.findById(id);
+        return rama.orElse(null);
+    }
+
     public Rama saveRama(Rama rama){
             
        return ramaRepository.save(rama);
