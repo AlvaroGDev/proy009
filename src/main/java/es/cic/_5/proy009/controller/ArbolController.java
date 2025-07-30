@@ -1,7 +1,6 @@
 package es.cic._5.proy009.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,6 @@ import es.cic._5.proy009.model.Arbol;
 import es.cic._5.proy009.model.Rama;
 import es.cic._5.proy009.model.RamaDTO;
 import es.cic._5.proy009.service.ArbolService;
-import es.cic._5.proy009.service.RamaService;
 
 @RestController
 @RequestMapping("/arbol")
@@ -36,8 +34,6 @@ public class ArbolController {
     @Autowired
     private ArbolService arbolService;
 
-    @Autowired
-    private RamaService ramaService;
 
     // -- MÉTODOS CRUD PARA ÁRBOL --
 
