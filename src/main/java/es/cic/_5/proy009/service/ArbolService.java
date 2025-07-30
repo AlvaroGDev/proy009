@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import es.cic._5.proy009.model.Arbol;
 import es.cic._5.proy009.model.Rama;
 import es.cic._5.proy009.repository.ArbolRepository;
+import es.cic._5.proy009.repository.RamaRepository;
 
 @Service
 @Transactional
@@ -18,13 +19,11 @@ public class ArbolService {
     @Autowired
     private ArbolRepository arbolRepository;
 
+    @Autowired
+    private RamaRepository ramaRepository;
+
     public Arbol create(Arbol arbol) {
-
         return arbolRepository.save(arbol);
-    }
-
-    public Arbol createRama (Rama rama) {
-        return arbolRepository.save(rama);
     }
 
     @Transactional(readOnly = true)
@@ -38,11 +37,16 @@ public class ArbolService {
         return arbol.orElse(null);
     }
 
-    public void update(Arbol conductor) {
-        arbolRepository.save(conductor);
+    public void update(Arbol arbol) {
+        arbolRepository.save(arbol);
     }
 
     public void delete(Long id) {
         arbolRepository.deleteById(id);
+    }
+
+    public Rama saveRama(Rama rama) throws Exception {
+            
+       return ramaRepository.save(rama);
     }
 }

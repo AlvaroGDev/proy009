@@ -42,30 +42,39 @@ public class Arbol {
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public Long getEdad() {
         return edad;
     }
+
     public void setEdad(Long edad) {
         this.edad = edad;
     }
+
     public String getEspecie() {
         return especie;
     }
+
     public void setEspecie(String especie) {
         this.especie = especie;
     }
+
     public String getTipoHoja() {
         return tipoHoja;
     }
+
     public void setTipoHoja(String tipoHoja) {
         this.tipoHoja = tipoHoja;
     }
+
     public Boolean getFrutal() {
         return frutal;
     }
+
     public void setFrutal(Boolean frutal) {
         this.frutal = frutal;
     }
@@ -99,6 +108,14 @@ public class Arbol {
     public String toString() {
         return "Arbol [id=" + id + ", edad=" + edad + ", especie=" + especie + ", tipoHoja=" + tipoHoja + ", frutal="
                 + frutal + "]";
+    }
+
+    public List<Rama> getRamas() {
+        return ramas;
+    }
+
+    public void setRamas(List<Rama> ramas) {
+        this.ramas = ramas;
     }
     
 }

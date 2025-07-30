@@ -1,6 +1,7 @@
 package es.cic._5.proy009.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import es.cic._5.proy009.model.Arbol;
 import es.cic._5.proy009.model.Rama;
 import es.cic._5.proy009.service.ArbolService;
+import es.cic._5.proy009.service.RamaService;
 
 @RestController
 @RequestMapping("/arbol")
@@ -26,6 +28,11 @@ public class ArbolController {
     
     @Autowired
     private ArbolService arbolService;
+
+    @Autowired
+    private RamaService ramaService;
+
+    // -- MÉTODOS CRUD PARA ÁRBOL -- 
 
     @GetMapping
     public List<Arbol> getAll() {
@@ -68,10 +75,18 @@ public class ArbolController {
         arbolService.delete(id);
     }
 
-    @PostMapping("/crearama") // El arbol desarrolla una rama
-    public Arbol create(@RequestBody Rama rama) {
-        Arbol ramaCreada = arbolService.createRama(rama);
-        return ramaCreada;
+    // -- MÉTODOS CRUD PARA RAMA --
+    @PostMapping("/{id}/rama") // El arbol desarrolla una rama
+    public Rama createRama(@PathVariable Long id, @RequestBody Rama rama) throws Exception{
+
+        Arbol arbol = arbolService.get(id);
+        if( arbol == null)
+        throw new Exception("Error: Estás apuntando a un arbol que no existe");
+
+        rama.setArbol(arbol);
+
+        return arbolService.saveRama(rama);
+        
     }
 
 }
